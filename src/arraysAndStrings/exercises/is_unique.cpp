@@ -13,7 +13,7 @@ using namespace std;
 
 
 bool hasOnlyUniqueChars(const string myStr, const bool useUnicode = false) {
-    const int charsetLimit = 128;
+    const int charsetLimit = 128; 
     // cannot have only unique chars if length is bigger than the alphabet
     if (myStr.length() > charsetLimit) return false;
     bool charSet[charsetLimit] ={ 0 };
