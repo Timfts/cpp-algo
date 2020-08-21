@@ -13,7 +13,7 @@ bool checkPermutation(const string firstString, const string secondString, const
   const int charsetSize = useExtendedASCII ? 256 : 128;
 
   auto fillCharMap = [](int *charMap, string wordToMap, int charsetSize = 128) {
-    int *charMapCopy = charMap;
+    int *charMapCopy = new int[charsetSize];
     for (int c = 0; c < wordToMap.length(); c++)
     {
       int currentCharNumber = wordToMap[c];
@@ -22,20 +22,36 @@ bool checkPermutation(const string firstString, const string secondString, const
     return charMapCopy;
   };
 
-  auto compareChars = []() {
-    cout << "compare second word with map" << endl;
+  auto compareMaps = [](int *firstMap, int *secondMap, int charsetSize) {
+    for (int c = 0; c < charsetSize; c++)
+    {
+      bool isEquiv = firstMap[c] == secondMap[c];
+      if (!isEquiv)
+      {
+        return false;
+        break;
+      }
+    }
+    return true;
   };
 
   int *charMap = new int[charsetSize];
-  int *filledCharMap = fillCharMap(charMap, firstString, charsetSize);
+  int *firstCharMap = fillCharMap(charMap, firstString, charsetSize);
+  int *secondCharMap = fillCharMap(charMap, secondString, charsetSize);
   delete[] charMap;
 
-  // match filledCharMap with second word
-  delete[] filledCharMap;
-  return true;
+  bool areMapsEquiv = compareMaps(firstCharMap, secondCharMap, charsetSize);
+
+  delete[] firstCharMap;
+  delete[] secondCharMap;
+  return areMapsEquiv;
 }
 
 int main()
 {
-  checkPermutation("cenoaaa", "batatax", true);
+  auto printCorrectMessage = [](bool checkResult) {
+    return checkResult ? "the second word is a permutation" : "the second word isn't a permutation";
+  };
+  bool isPermutation = checkPermutation("cenoaaa", "benoaaa", true);
+  cout << printCorrectMessage(isPermutation) << endl;
 }
